@@ -1,11 +1,16 @@
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useHelper } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Perf } from "r3f-perf";
 import { useRef } from "react";
-import type { Mesh } from "three";
+import {
+  DirectionalLightHelper,
+  type DirectionalLight,
+  type Mesh,
+} from "three";
 
 export const Experience = () => {
   const cube = useRef<Mesh>(null);
+  const directionalLight = useRef<DirectionalLight>(null!);
 
   useFrame((_state, delta) => {
     if (cube.current) {
@@ -13,13 +18,20 @@ export const Experience = () => {
     }
   });
 
+  useHelper(directionalLight, DirectionalLightHelper, 1);
+
   return (
     <>
+      <color attach="background" args={["ivory"]} />
       <Perf position="top-left" />
 
       <OrbitControls makeDefault />
 
-      <directionalLight position={[1, 2, 3]} intensity={4.5} />
+      <directionalLight
+        ref={directionalLight}
+        position={[1, 2, 3]}
+        intensity={4.5}
+      />
       <ambientLight intensity={1.5} />
 
       <mesh position-x={-2}>
