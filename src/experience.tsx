@@ -31,20 +31,27 @@ export const Experience = () => {
         ref={directionalLight}
         position={[1, 2, 3]}
         intensity={4.5}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
       />
       <ambientLight intensity={1.5} />
 
-      <mesh position-x={-2}>
+      <mesh position-x={-2} castShadow>
         <sphereGeometry />
         <meshStandardMaterial color="orange" />
       </mesh>
 
-      <mesh ref={cube} position-x={2} scale={1.5}>
+      <mesh ref={cube} position-x={2} scale={1.5} castShadow>
         <boxGeometry />
         <meshStandardMaterial color="mediumpurple" />
       </mesh>
 
-      <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
+      <mesh
+        position-y={-1}
+        rotation-x={-Math.PI * 0.5}
+        scale={10}
+        receiveShadow
+      >
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
       </mesh>
