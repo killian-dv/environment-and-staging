@@ -11,7 +11,7 @@ export const App = () => {
           far: 200,
           position: [-4, 3, 6],
         }}
-        shadows
+        // shadows
       >
         <Experience />
       </Canvas>

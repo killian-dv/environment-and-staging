@@ -1,26 +1,41 @@
-import {
-  AccumulativeShadows,
-  OrbitControls,
-  RandomizedLight,
-} from "@react-three/drei";
+import { ContactShadows, OrbitControls, useHelper } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { useControls } from "leva";
 import { Perf } from "r3f-perf";
 import { useRef } from "react";
-import { type DirectionalLight, type Mesh } from "three";
+import {
+  DirectionalLightHelper,
+  type DirectionalLight,
+  type Mesh,
+} from "three";
 
 export const Experience = () => {
   const cube = useRef<Mesh>(null);
   const directionalLight = useRef<DirectionalLight>(null!);
 
-  useFrame((state, delta) => {
-    const time = state.clock.getElapsedTime();
+  useFrame((_state, delta) => {
+    // const time = state.clock.getElapsedTime();
     if (cube.current) {
       cube.current.rotation.y += delta * 0.2;
-      cube.current.position.x = Math.sin(time) + 2;
+      // cube.current.position.x = Math.sin(time) + 2;
     }
   });
 
-  // useHelper(directionalLight, DirectionalLightHelper, 1);
+  useHelper(directionalLight, DirectionalLightHelper, 1);
+
+  const { color, opacity, blur } = useControls("contact shadows", {
+    color: "#1d8f75",
+    opacity: {
+      value: 0.4,
+      min: 0,
+      max: 1,
+    },
+    blur: {
+      value: 2.8,
+      min: 0,
+      max: 10,
+    },
+  });
 
   return (
     <>
@@ -46,7 +61,7 @@ export const Experience = () => {
 
       {/* <BakeShadows /> */}
       {/* <SoftShadows size={25} samples={10} focus={0} /> */}
-      <AccumulativeShadows
+      {/* <AccumulativeShadows
         position={[0, -0.99, 0]}
         scale={10}
         opacity={0.8}
@@ -63,7 +78,17 @@ export const Experience = () => {
           position={[1, 2, 3]}
           bias={0.001}
         />
-      </AccumulativeShadows>
+      </AccumulativeShadows> */}
+      <ContactShadows
+        position={[0, -0.99, 0]}
+        scale={10}
+        resolution={512}
+        far={5}
+        color={color}
+        opacity={opacity}
+        blur={blur}
+        frames={1}
+      />
 
       <mesh position-x={-2} castShadow>
         <sphereGeometry />
