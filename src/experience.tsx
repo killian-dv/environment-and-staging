@@ -1,9 +1,4 @@
-import {
-  ContactShadows,
-  OrbitControls,
-  Sky,
-  useHelper,
-} from "@react-three/drei";
+import { OrbitControls, Stage, useHelper } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
 import { Perf } from "r3f-perf";
@@ -28,34 +23,40 @@ export const Experience = () => {
 
   useHelper(directionalLight, DirectionalLightHelper, 1);
 
-  const { color, opacity, blur } = useControls("contact shadows", {
-    color: "#1d8f75",
-    opacity: {
-      value: 0.4,
-      min: 0,
-      max: 1,
-    },
-    blur: {
-      value: 2.8,
+  // const { sunPosition } = useControls("sky", {
+  //   sunPosition: {
+  //     value: [1, 2, 3],
+  //   },
+  // });
+
+  const { envMapIntensity } = useControls("environment map", {
+    envMapIntensity: {
+      value: 1,
       min: 0,
       max: 10,
     },
   });
 
-  const { sunPosition } = useControls("sky", {
-    sunPosition: {
-      value: [1, 2, 3],
-    },
-  });
-
   return (
     <>
-      <color attach="background" args={["ivory"]} />
+      {/* <Environment
+        files={[
+          "./environmentMaps/2/px.jpg",
+          "./environmentMaps/2/nx.jpg",
+          "./environmentMaps/2/py.jpg",
+          "./environmentMaps/2/ny.jpg",
+          "./environmentMaps/2/pz.jpg",
+          "./environmentMaps/2/nz.jpg",
+        ]}
+        environmentIntensity={envMapIntensity}
+        background
+      /> */}
+      {/* <color attach="background" args={["ivory"]} /> */}
       <Perf position="top-left" />
 
       <OrbitControls makeDefault />
 
-      <directionalLight
+      {/* <directionalLight
         ref={directionalLight}
         position={sunPosition}
         intensity={4.5}
@@ -68,9 +69,9 @@ export const Experience = () => {
         shadow-camera-top={5}
         shadow-camera-bottom={-5}
       />
-      <ambientLight intensity={1.5} />
+      <ambientLight intensity={1.5} /> */}
 
-      <Sky sunPosition={sunPosition} />
+      {/* <Sky sunPosition={sunPosition} /> */}
 
       {/* <BakeShadows /> */}
       {/* <SoftShadows size={25} samples={10} focus={0} /> */}
@@ -92,7 +93,7 @@ export const Experience = () => {
           bias={0.001}
         />
       </AccumulativeShadows> */}
-      <ContactShadows
+      {/* <ContactShadows
         position={[0, -0.99, 0]}
         scale={10}
         resolution={512}
@@ -101,22 +102,33 @@ export const Experience = () => {
         opacity={opacity}
         blur={blur}
         frames={1}
-      />
+      /> */}
 
-      <mesh position-x={-2} castShadow>
-        <sphereGeometry />
-        <meshStandardMaterial color="orange" />
-      </mesh>
+      <Stage
+        shadows={{
+          type: "contact",
+          opacity: 0.5,
+          blur: 3,
+        }}
+        environment="sunset"
+        preset="portrait"
+        intensity={envMapIntensity}
+      >
+        <mesh position-x={-2} castShadow>
+          <sphereGeometry />
+          <meshStandardMaterial color="orange" />
+        </mesh>
 
-      <mesh ref={cube} position-x={2} scale={1.5} castShadow>
-        <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
-      </mesh>
+        <mesh ref={cube} position-x={2} scale={1.5} castShadow>
+          <boxGeometry />
+          <meshStandardMaterial color="mediumpurple" />
+        </mesh>
+      </Stage>
 
-      <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
+      {/* <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
-      </mesh>
+      </mesh> */}
     </>
   );
 };
